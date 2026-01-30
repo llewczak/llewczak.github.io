@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Łukasz Lewczak</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <style>
+        :root {
+            --text: #ffffff;
+            --background: #000000;
+            --primary: #007218;
+            --secondary: #005e1f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            scroll-snap-type: y mandatory;
+            overflow-x: hidden;
+        }
+
+        section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start;
+            padding: 40px 20px;
+        }
+
+        #hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)),
+            url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        #hero h1 {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            font-weight: 200;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btn-transparent {
+            padding: 14px 45px;
+            border: 1px solid var(--text);
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: 0.5s ease;
+        }
+
+        .btn-transparent:hover {
+            background: var(--text);
+            color: var(--background);
+        }
+
+        #about {
+            background-color: #030303;
+        }
+
+        .about-container {
+            display: flex;
+            width: 95%;
+            max-width: 1400px;
+            align-items: center;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .about-photo-side {
+            flex: 1;
+            min-width: 400px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-img {
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--primary);
+            padding: 15px;
+        }
+
+        .content-card {
+            flex: 1.2;
+            min-width: 450px;
+            min-height: 550px;
+            background: #080808;
+            border: 1px solid #1a1a1a;
+            position: relative;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 35px;
+            right: 35px;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .toggle-btn:hover { color: var(--text); }
+
+        .info-content {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .info-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            font-weight: 300;
+            color: var(--primary);
+        }
+
+        .info-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        .skills-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .skills-list li::before {
+            content: "→";
+            color: var(--primary);
+            margin-right: 12px;
+        }
+
+        .portfolio-trigger {
+            display: block;
+            margin: 40px auto 0 auto;
+            width: fit-content;
+            padding: 12px 30px;
+            color: var(--primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            border: 1px solid var(--primary);
+            transition: 0.4s;
+            text-align: center;
+        }
+
+        .portfolio-trigger:hover {
+            background: var(--primary);
+            color: var(--text);
+        }
+
+        #portfolio {
+            display: block;
+            padding: 120px 8%;
+            background-color: var(--background);
+        }
+
+        .portfolio-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 200;
+            margin-bottom: 100px;
+            letter-spacing: 4px;
+        }
+
+        .project-row {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 150px auto;
+            gap: 80px;
+        }
+
+        .project-row:nth-child(even) { flex-direction: row-reverse; }
+
+        .project-info { flex: 1; }
+
+        .project-info h3 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .project-info p {
+            font-size: 1.1rem;
+            color: #888;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .github-link i {
+            font-size: 1.8rem;
+        }
+
+        .github-link span {
+            font-size: 0.85rem;
+            color: lightgray;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .github-link:hover i { color: var(--primary); }
+        .github-link:hover span { color: var(--text); }
+
+        footer {
+            padding: 80px 20px;
+            text-align: center;
+            background: #050505;
+            border-top: 1px solid #111;
+        }
+
+        .socials { margin-top: 30px; }
+        .socials a {
+            color: var(--text);
+            font-size: 1.8rem;
+            margin: 0 20px;
+            transition: 0.3s;
+        }
+        .socials a:hover { color: var(--primary); }
+
+        @media (max-width: 1024px) {
+            .profile-img { width: 350px; height: 350px; }
+            .content-card { min-height: 450px; padding: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            section { height: auto; scroll-snap-align: none; }
+            .about-photo-side, .content-card { min-width: 100%; }
+            .project-row, .project-row:nth-child(even) {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-img { width: 280px; height: 280px; }
+        }
+    </style>
+</head>
+<body>
+
+<section id="hero">
+    <h1>Hi, my name is Łukasz Lewczak</h1>
+    <a href="#about" class="btn-transparent">Get to know me</a>
+</section>
+
+<section id="about">
+    <div class="about-container">
+        <div class="about-photo-side">
+            <img src="" alt="Avatar" class="profile-img">
+        </div>
+
+        <div class="content-card">
+            <div class="toggle-btn" onclick="toggleContent()">
+                <i class="fas fa-long-arrow-alt-right" id="arrow-icon"></i>
+            </div>
+
+            <div id="about-content" class="info-content active">
+                <h2><b>About Me</b></h2>
+                <p>I'm currently studying Computer Science at AGH UST in Krakow. I'm passionate about OOP and ML.</p>
+            </div>
+
+            <div id="skills-content" class="info-content">
+                <h2><b>Technologies I know:</b></h2>
+                <ul class="skills-list">
+                    <li>Java <i class="fab fa-java"></i></li>
+                    <li>Python <i class="fab fa-python"></i></li>
+                    <li>Kotlin <i class="devicon-kotlin-plain"></i></li>
+                    <li>SQL <i class="fas fa-database"></i></li>
+                </ul>
+                <a href="#portfolio" class="portfolio-trigger">See my portfolio</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="portfolio">
+    <h2 class="portfolio-title"><b>Portfolio</b></h2>
+
+    <div class="project-row">
+        <div class="project-info">
+            <h3>TrainIt</h3>
+            <p>An interactive training platform bridging the gap between coaches and athletes through custom plan creation, trainee tracking, and personalized workout scheduling.</p>
+            <a href="https://github.com/llewczak/trainit-website" target="_blank" rel="noopener noreferrer" class="github-link">
+                <i class="fab fa-github"></i>
+                <span>View on GitHub</span>
+            </a>
+        </div>
+    </div>
+
+
+</section>
+
+<footer>
+    <p>&copy; 2026 ŁUKASZ LEWCZAK. ALL RIGHTS RESERVED.</p>
+    <div class="socials">
+        <a href="https://github.com/llewczak"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/llewczak/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="mailto:lewczakluk@student.agh.edu.pl"><i class="far fa-envelope"></i></a>
+    </div>
+</footer>
+
+<script>
+    function toggleContent() {
+        const about = document.getElementById('about-content');
+        const skills = document.getElementById('skills-content');
+        const arrow = document.getElementById('arrow-icon');
+
+        if (about.classList.contains('active')) {
+            about.classList.remove('active');
+            skills.classList.add('active');
+            arrow.style.transform = "rotate(180deg)";
+        } else {
+            skills.classList.remove('active');
+            about.classList.add('active');
+            arrow.style.transform = "rotate(0deg)";
+        }
+    }
+</script>
+
+</body>
+</html>
