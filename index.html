@@ -32,6 +32,28 @@
             overflow-x: hidden;
         }
 
+        #lang-switch {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            z-index: 1000;
+            background: transparent;
+            border: 1px solid var(--text);
+            color: var(--text);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        #lang-switch:hover {
+            background: var(--text);
+            color: var(--background);
+        }
+
         section {
             min-height: 100vh;
             width: 100%;
@@ -118,19 +140,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-
             transform: scale(1.9);
             object-position: center 60%;
-
             transition: transform 0.4s ease;
-        }
-
-        @media (max-width: 1024px) {
-            .profile-img-wrapper { width: 350px; height: 350px; }
-        }
-
-        @media (max-width: 768px) {
-            .profile-img-wrapper { width: 280px; height: 280px; }
         }
 
         .content-card {
@@ -147,17 +159,42 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
 
-        .toggle-btn {
+        .dots-indicator {
             position: absolute;
             bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            transform: scale(1.2);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            bottom: 25px;
             right: 35px;
             color: var(--primary);
             font-size: 1.8rem;
             cursor: pointer;
             transition: color 0.3s, transform 0.4s;
             z-index: 10;
-
-            animation: arrow-bounce 5s infinite;
+            animation: arrow-bounce 8s infinite;
         }
 
         .toggle-btn:hover { color: var(--text); }
@@ -300,8 +337,10 @@
         }
         .socials a:hover { color: var(--primary); }
 
+        [data-lang="pl"] { display: none; }
+
         @media (max-width: 1024px) {
-            .profile-img { width: 350px; height: 350px; }
+            .profile-img-wrapper { width: 350px; height: 350px; }
             .content-card { min-height: 450px; padding: 40px; }
         }
 
@@ -312,27 +351,30 @@
                 flex-direction: column;
                 text-align: center;
             }
-            .profile-img { width: 280px; height: 280px; }
+            .profile-img-wrapper { width: 280px; height: 280px; }
+            .dots-indicator { bottom: 20px; }
         }
 
         @keyframes arrow-bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(0);
-            }
-            40% {
-                transform: translateX(10px);
-            }
-            60% {
-                transform: translateX(5px);
-            }
+            0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(5px); }
         }
     </style>
 </head>
 <body>
 
+<button id="lang-switch" onclick="toggleLanguage()">PL</button>
+
 <section id="hero">
-    <h1>Hi, my name is Łukasz Lewczak</h1>
-    <a href="#about" class="btn-transparent">Get to know me</a>
+    <h1>
+        <span data-lang="en">Hi, my name is Łukasz Lewczak</span>
+        <span data-lang="pl">Cześć, nazywam się Łukasz Lewczak</span>
+    </h1>
+    <a href="#about" class="btn-transparent">
+        <span data-lang="en">Get to know me</span>
+        <span data-lang="pl">Poznaj mnie</span>
+    </a>
 </section>
 
 <section id="about">
@@ -344,24 +386,41 @@
         </div>
 
         <div class="content-card">
+            <div class="dots-indicator">
+                <div class="dot active" id="dot-1" onclick="toggleContent()"></div>
+                <div class="dot" id="dot-2" onclick="toggleContent()"></div>
+            </div>
+
             <div class="toggle-btn" onclick="toggleContent()">
                 <i class="fas fa-long-arrow-alt-right" id="arrow-icon"></i>
             </div>
 
             <div id="about-content" class="info-content active">
-                <h2><b>About Me</b></h2>
-                <p>I'm currently studying Computer Science at AGH UST in Krakow. I'm passionate about OOP and ML.</p>
+                <h2><b>
+                    <span data-lang="en">About Me</span>
+                    <span data-lang="pl">O mnie</span>
+                </b></h2>
+                <p>
+                    <span data-lang="en">I'm currently studying Computer Science at AGH UST in Krakow. I'm passionate about OOP and ML.</span>
+                    <span data-lang="pl">Obecnie studiuję Informatykę na AGH w Krakowie. Pasjonuję się programowaniem obiektowym (OOP) oraz uczeniem maszynowym (ML).</span>
+                </p>
             </div>
 
             <div id="skills-content" class="info-content">
-                <h2><b>Technical Stack</b></h2>
+                <h2><b>
+                    <span data-lang="en">Technical Stack</span>
+                    <span data-lang="pl">Technologie</span>
+                </b></h2>
                 <ul class="skills-list">
                     <li>Java <i class="fab fa-java"></i></li>
                     <li>Python <i class="fab fa-python"></i></li>
                     <li>Kotlin <i class="devicon-kotlin-plain"></i></li>
                     <li>SQL <i class="fas fa-database"></i></li>
                 </ul>
-                <a href="#portfolio" class="portfolio-trigger">See my portfolio</a>
+                <a href="#portfolio" class="portfolio-trigger">
+                    <span data-lang="en">See my portfolio</span>
+                    <span data-lang="pl">Zobacz moje portfolio</span>
+                </a>
             </div>
         </div>
     </div>
@@ -373,27 +432,39 @@
     <div class="project-row">
         <div class="project-info">
             <h3>TrainIt</h3>
-            <p>An interactive training platform bridging the gap between coaches and athletes through custom plan creation, trainee tracking, and personalized workout scheduling.</p>
+            <p>
+                <span data-lang="en">An interactive training platform bridging the gap between coaches and athletes through plan creation, trainee tracking, and personalized workout scheduling.</span>
+                <span data-lang="pl">Interaktywna platforma treningowa łącząca trenerów i sportowców poprzez tworzenie planów, śledzenie postępów i spersonalizowany harmonogram treningów.</span>
+            </p>
             <div style="padding-bottom: 20px">
                 <i class="devicon-vitejs-plain" style="color: lightgray"></i> <i class="devicon-react-original" style="color: lightgray"></i> <i class="devicon-typescript-plain" style="color: lightgray"></i> <i class="devicon-nodejs-plain" style="color: lightgray"></i> <i class="devicon-prisma-original" style="color: lightgray"></i> <i class="devicon-postgresql-plain" style="color: lightgray"></i>
             </div>
             <a href="https://github.com/llewczak/trainit-website" target="_blank" rel="noopener noreferrer" class="github-link">
                 <i class="fab fa-github"></i>
-                <span>View on GitHub</span>
+                <span>
+                    <span data-lang="en">View on GitHub</span>
+                    <span data-lang="pl">Zobacz na GitHubie</span>
+                </span>
             </a>
         </div>
     </div>
 
     <div class="project-row">
         <div class="project-info">
-            <h3>Darwin World - Evolutionary Ecosystem Simulator</h3>
-            <p>Darwin World is an advanced evolutionary ecosystem simulator built with Java 25 and JavaFX. The project simulates a biological world where animals compete for food, reproduce, and pass on their genetic traits. It features a robust manager-based architecture and a rich suite of data visualization tools.</p>
+            <h3>Darwin World</h3>
+            <p>
+                <span data-lang="en">Darwin World is an advanced evolutionary ecosystem simulator built with Java 25 and JavaFX. The project simulates a biological world where animals compete for food, reproduce, and pass on their genetic traits. It features a robust manager-based architecture and a rich suite of data visualization tools.</span>
+                <span data-lang="pl">Darwin World to zaawansowany symulator ekosystemu ewolucyjnego zbudowany w Javie 25 i JavaFX. Projekt symuluje biologiczny świat, w którym zwierzęta rywalizują o pożywienie, rozmnażają się i przekazują swoje cechy genetyczne. Posiada solidną architekturę zarządczą oraz bogaty zestaw narzędzi do wizualizacji danych.</span>
+            </p>
             <div style="padding-bottom: 20px">
                 <i class="devicon-java-plain" style="color: lightgray"></i> <i class="devicon-gradle-plain" style="color: lightgray"></i>
             </div>
             <a href="https://github.com/Shadov15/Darwin-World" target="_blank" rel="noopener noreferrer" class="github-link">
                 <i class="fab fa-github"></i>
-                <span>View on GitHub</span>
+                <span>
+                    <span data-lang="en">View on GitHub</span>
+                    <span data-lang="pl">Zobacz na GitHubie</span>
+                </span>
             </a>
         </div>
     </div>
@@ -401,7 +472,11 @@
 </section>
 
 <footer>
-    <p>&copy; 2026 ŁUKASZ LEWCZAK. ALL RIGHTS RESERVED.</p>
+    <p>
+        &copy; 2026 ŁUKASZ LEWCZAK.
+        <span data-lang="en">ALL RIGHTS RESERVED.</span>
+        <span data-lang="pl">WSZELKIE PRAWA ZASTRZEŻONE.</span>
+    </p>
     <div class="socials">
         <a href="https://github.com/llewczak"><i class="fab fa-github"></i></a>
         <a href="https://www.linkedin.com/in/llewczak/"><i class="fab fa-linkedin-in"></i></a>
@@ -413,19 +488,38 @@
     function toggleContent() {
         const about = document.getElementById('about-content');
         const skills = document.getElementById('skills-content');
-        const arrow = document.getElementById('arrow-icon');
         const btn = document.querySelector('.toggle-btn');
+        const dot1 = document.getElementById('dot-1');
+        const dot2 = document.getElementById('dot-2');
 
         if (about.classList.contains('active')) {
             about.classList.remove('active');
             skills.classList.add('active');
-            arrow.style.transform = "rotate(180deg)";
-            btn.style.animation = "none";
+            dot1.classList.remove('active');
+            dot2.classList.add('active');
         } else {
             skills.classList.remove('active');
             about.classList.add('active');
-            arrow.style.transform = "rotate(0deg)";
-            btn.style.animation = "arrow-bounce 3s infinite";
+            dot2.classList.remove('active');
+            dot1.classList.add('active');
+        }
+    }
+
+    let currentLang = 'en';
+    function toggleLanguage() {
+        currentLang = currentLang === 'en' ? 'pl' : 'en';
+        const plElements = document.querySelectorAll('[data-lang="pl"]');
+        const enElements = document.querySelectorAll('[data-lang="en"]');
+        const btn = document.getElementById('lang-switch');
+
+        if (currentLang === 'pl') {
+            enElements.forEach(el => el.style.display = 'none');
+            plElements.forEach(el => el.style.display = 'inline');
+            btn.textContent = 'EN';
+        } else {
+            plElements.forEach(el => el.style.display = 'none');
+            enElements.forEach(el => el.style.display = 'inline');
+            btn.textContent = 'PL';
         }
     }
 </script>
